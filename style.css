@@ -1,0 +1,101 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-size: 100%;
+  background-color: skyblue;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+.header {
+  background-color: skyblue;
+  flex: 0 1 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.header h1 {
+  padding: 16px;
+}
+
+.calculator {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.frame {
+  padding: 2px;
+  gap: 2px;
+  border: 1px solid black;
+  background-color: black;
+  display: flex;
+  flex: 0 1 40%;
+  aspect-ratio: 1 / 1;
+  flex-direction: column;
+}
+
+.display {
+  flex: 1;
+  border: 1px solid black;
+  background-color: bisque;
+}
+
+.buttons {
+  gap: 2px;
+  flex: 4;
+  display: flex;
+}
+
+button {
+  color: bisque;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.clear {
+  flex: 1;
+  background-color: rgb(125, 104, 86);
+}
+
+.rows {
+  gap: 2px;
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  gap: 2px;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+}
+
+.number,
+.operator {
+  flex: 1;
+  background-color: rgb(125, 104, 86);
+}
+
+.footer {
+  background-color: skyblue;
+  flex: 0 1 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.footer p {
+  padding: 16px;
+  font-size: 24px;
+}
