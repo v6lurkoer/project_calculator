@@ -8,6 +8,16 @@ const field = document.querySelector(".field");
 
 btns.forEach((btn) => btn.addEventListener("click", handleClick));
 
+// todo:
+// - allow multiple operations in a row instead of one
+// - number should fill display height
+// - two displays, one for current operation, the other for entire operation
+// - hard limit on number length?
+// - hard limit on decimal length?
+// - allow user to write decimal
+// - add "backspace" button
+// - add keyboard support
+
 function handleClick() {
   if (this.getAttribute("class") === "number") {
     if (!calculated) {
@@ -40,7 +50,7 @@ function handleClick() {
           o = "add";
           field.textContent += this.textContent;
         }
-      };
+      }
       if (this.textContent === "-") {
         if (o === "add" ||
             o === "subtract" ||
@@ -129,7 +139,12 @@ function multiply(x, y) {
 }
 
 function divide(x, y) {
-  o = null;
-  field.textContent += (x / y);
-  return x / y;
+  if (x === 0 || y === 0) {
+    o = null;
+    field.textContent = "Can't divide by zero, silly!";
+    return x / y;
+  } else {
+    o = null;
+    field.textContent += (x / y);
+  }
 }

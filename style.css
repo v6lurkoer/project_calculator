@@ -10,10 +10,9 @@ body {
   background-color: skyblue;
 }
 
-.container {
-  height: 100%;
+body {
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
 }
 
 .header {
@@ -27,14 +26,14 @@ body {
   padding: 16px;
 }
 
-.calculator {
+.container {
   flex: 1 1 auto;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.frame {
+.calculator {
   padding: 2px;
   gap: 2px;
   border: 1px solid black;
@@ -89,8 +88,6 @@ button {
 }
 
 .footer {
-  background-color: skyblue;
-  flex: 0 1 auto;
   display: flex;
   justify-content: center;
 }
