@@ -5,8 +5,10 @@ let calculated = false;
 
 const btns = document.querySelectorAll("button");
 const field = document.querySelector(".field");
+const currentOp = document.querySelector(".current-op");
 
-// just for testing my understanding of how branches work
+currentOp.textContent = "0123456789"
+field.textContent = "0 1 2 3 4 5 6 7 8 9"
 
 btns.forEach((btn) => btn.addEventListener("click", handleClick));
 
@@ -107,12 +109,16 @@ function handleClick() {
   }
 
   if (this.getAttribute("class") === "clear") {
-    field.textContent = "";
-    x = null;
-    y = null;
-    o = null;
-    calculated = false;
+    clear();
   }
+}
+
+function clear() {
+  field.textContent = "";
+  x = null;
+  y = null;
+  o = null;
+  calculated = false;
 }
 
 function operate(x, y, o) {
