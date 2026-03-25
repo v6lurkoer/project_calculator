@@ -6,6 +6,8 @@ let calculated = false;
 const btns = document.querySelectorAll("button");
 const field = document.querySelector(".field");
 
+// just for testing my understanding of how branches work
+
 btns.forEach((btn) => btn.addEventListener("click", handleClick));
 
 // todo:
