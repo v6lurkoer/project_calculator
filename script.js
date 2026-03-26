@@ -1,14 +1,14 @@
 let x = null;
 let y = null;
 let o = null;
+let sum = null;
+let wasLastX = false;
 let calculated = false;
+let regexNum = /[0-9]/;
 
 const btns = document.querySelectorAll("button");
-const field = document.querySelector(".field");
-const currentOp = document.querySelector(".current-op");
-
-currentOp.textContent = "0123456789"
-field.textContent = "0 1 2 3 4 5 6 7 8 9"
+const field = document.querySelector("#field");
+const currentOp = document.querySelector("#current-op");
 
 btns.forEach((btn) => btn.addEventListener("click", handleClick));
 
@@ -23,102 +23,101 @@ btns.forEach((btn) => btn.addEventListener("click", handleClick));
 // - add keyboard support
 
 function handleClick() {
-  if (this.getAttribute("class") === "number") {
-    if (!calculated) {
-      if (o === "add" ||
-          o === "subtract" ||
-          o === "multiply" ||
-          o === "divide") {
-        if (y === null) y = "";
-        y += this.textContent
-        field.textContent += this.textContent;
-      } else {
-        if (x === null) x = "";
-        x += this.textContent;
-        field.textContent += this.textContent;
-      }
-    }
-  }
+  if (this.getAttribute("class") === "number") clickNumber(this.textContent);
+  if (this.getAttribute("class") === "operator") clickOperator(this.textContent);
+  if (this.getAttribute("id") === "equals") clickEquals(this.textContent);
+  if (this.getAttribute("id") === "clear") clickClear();
+}
 
-  if (this.getAttribute("class") === "operator") {
-    if (x !== null && y === null) {
-      if (this.textContent === "+") {
-        if (o === "add" ||
-            o === "subtract" ||
-            o === "multiply" ||
-            o === "divide") {
-          field.textContent = field.textContent.substring(0, field.textContent.length - 1);
-          o = "add";
-          field.textContent += this.textContent;
-        } else {
-          o = "add";
-          field.textContent += this.textContent;
-        }
-      }
-      if (this.textContent === "-") {
-        if (o === "add" ||
-            o === "subtract" ||
-            o === "multiply" ||
-            o === "divide") {
-          field.textContent = field.textContent.substring(0, field.textContent.length - 1);
-          o = "subtract";
-          field.textContent += this.textContent;
-        } else {
-          o = "subtract";
-          field.textContent += this.textContent;
-        }
-      }
-      if (this.textContent === "×") {
-        if (o === "add" ||
-            o === "subtract" ||
-            o === "multiply" ||
-            o === "divide") {
-          field.textContent = field.textContent.substring(0, field.textContent.length - 1);
-          o = "multiply";
-          field.textContent += this.textContent;
-        } else {
-          o = "multiply";
-          field.textContent += this.textContent;
-        }
-      }
-      if (this.textContent === "/") {
-        if (o === "add" ||
-            o === "subtract" ||
-            o === "multiply" ||
-            o === "divide") {
-          field.textContent = field.textContent.substring(0, field.textContent.length - 1);
-          o = "divide";
-          field.textContent += this.textContent;
-        } else {
-          o = "divide";
-          field.textContent += this.textContent;
-        }
-      }
-    } else {
-      if (this.textContent === "=") {
-        if (o === "add" ||
-            o === "subtract" ||
-            o === "multiply" ||
-            o === "divide") {
-          field.textContent += this.textContent;
-          operate(parseInt(x), parseInt(y), o);
-          calculated = true;
-        }
-      }
-    }
-  }
-
-  if (this.getAttribute("class") === "clear") {
-    clear();
+function clickNumber(btnText) {
+  if (o !== null) {
+    if (y === null) y = "";
+    y += btnText;
+    field.textContent += btnText;
+    wasLastX = false;
+  } else {
+    if (x === null) x = "";
+    x += btnText;
+    field.textContent += btnText;
+    wasLastX = true;
   }
 }
 
-function clear() {
+function clickOperator(btnText) {
+  if (btnText === "+") {
+    if (o !== null) {
+      if (!regexNum.test(field.textContent.charAt(field.textContent.length-1))) {
+        field.textContent = field.textContent.substring(0, field.textContent.length - 1);
+      }
+      field.textContent += btnText;
+      o = "add";
+    } else {
+      field.textContent += btnText;
+      o = "add";
+    }
+  }
+  if (btnText === "-") {
+    if (o !== null) {
+      if (!regexNum.test(field.textContent.charAt(field.textContent.length-1))) {
+        field.textContent = field.textContent.substring(0, field.textContent.length - 1);
+      }
+      field.textContent += btnText;
+      o = "subtract";
+    } else {
+      field.textContent += btnText;
+      o = "subtract";
+    }
+  }
+  if (btnText === "×") {
+    if (o !== null) {
+      if (!regexNum.test(field.textContent.charAt(field.textContent.length-1))) {
+        field.textContent = field.textContent.substring(0, field.textContent.length - 1);
+      }
+      field.textContent += btnText;
+      o = "multiply";
+    } else {
+      field.textContent += btnText;
+      o = "multiply";
+    }
+  }
+  if (btnText === "÷") {
+    if (o !== null) {
+      if (!regexNum.test(field.textContent.charAt(field.textContent.length-1))) {
+        field.textContent = field.textContent.substring(0, field.textContent.length - 1);
+      }
+      field.textContent += btnText;
+      o = "divide";
+    } else {
+      field.textContent += btnText;
+      o = "divide";
+    }
+  }
+}
+
+function clickEquals(btnText) {
+  if (o !== null) {
+    if (x !== null && y !== null) {
+      sum = operate(parseInt(x), parseInt(y), o);
+      field.textContent += btnText;
+      field.textContent += sum;
+      isCalculated();
+    }
+  }
+}
+
+function clickClear() {
   field.textContent = "";
+  currentOp.textContent = "";
   x = null;
   y = null;
   o = null;
   calculated = false;
+}
+
+function isCalculated() {
+  x = sum;
+  y = null;
+  o = null;
 }
 
 function operate(x, y, o) {
@@ -130,29 +129,26 @@ function operate(x, y, o) {
 
 function add(x, y) {
   o = null;
-  field.textContent += (x + y);
   return x + y;
 }
 
 function subtract(x, y) {
   o = null;
-  field.textContent += (x - y);
   return x - y;
 }
 
 function multiply(x, y) {
   o = null;
-  field.textContent += (x * y);
   return x * y;
 }
 
 function divide(x, y) {
   if (x === 0 || y === 0) {
-    o = null;
     field.textContent = "Can't divide by zero, silly!";
+    o = null;
     return x / y;
   } else {
     o = null;
-    field.textContent += (x / y);
+    return x / y;
   }
 }

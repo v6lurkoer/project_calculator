@@ -99,7 +99,8 @@ button {
 
 .number,
 .operator,
-#decimal {
+#dot,
+#equals {
   flex: 1;
 }
 
