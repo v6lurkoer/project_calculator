@@ -98,9 +98,14 @@ function clickEquals(btnText) {
   if (o !== null) {
     if (x !== null && y !== null) {
       sum = operate(parseInt(x), parseInt(y), o);
-      field.textContent += btnText;
-      field.textContent += sum;
-      isCalculated();
+      if (typeof sum === "number") {
+        field.textContent += btnText;
+        field.textContent += sum;
+        isCalculated();
+      } else {
+        field.textContent = sum;
+        isCalculated();
+      }
     }
   }
 }
@@ -144,9 +149,8 @@ function multiply(x, y) {
 
 function divide(x, y) {
   if (x === 0 || y === 0) {
-    field.textContent = "Can't divide by zero, silly!";
     o = null;
-    return x / y;
+    return "Can't divide by zero, silly!";
   } else {
     o = null;
     return x / y;
