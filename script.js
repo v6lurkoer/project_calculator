@@ -1,26 +1,16 @@
 let x = null;
 let y = null;
 let o = null;
-let sum = null;
-let wasLastX = false;
-let calculated = false;
-let regexNum = /[0-9]/;
+let oNext = null;
+let s = null;
+const regexNum = /[0-9]/;
+const silly = "Can't divide by zero, silly!";
 
 const btns = document.querySelectorAll("button");
-const field = document.querySelector("#field");
-const currentOp = document.querySelector("#current-op");
+const displayU = document.querySelector("#display-upper");
+const displayL = document.querySelector("#display-lower");
 
 btns.forEach((btn) => btn.addEventListener("click", handleClick));
-
-// todo:
-// - allow multiple operations in a row instead of one
-// - number should fill display height
-// - two displays, one for current operation, the other for entire operation
-// - hard limit on number length?
-// - hard limit on decimal length?
-// - allow user to write decimal
-// - add "backspace" button
-// - add keyboard support
 
 function handleClick() {
   if (this.getAttribute("class") === "number") clickNumber(this.textContent);
@@ -30,99 +20,100 @@ function handleClick() {
 }
 
 function clickNumber(btnText) {
-  if (o !== null) {
-    if (y === null) y = "";
-    y += btnText;
-    field.textContent += btnText;
-    wasLastX = false;
-  } else {
-    if (x === null) x = "";
-    x += btnText;
-    field.textContent += btnText;
-    wasLastX = true;
+  if (displayU.textContent !== silly) {
+    if (o === null) {
+      if (x === null) x = "";
+      x += btnText;
+      displayU.textContent += btnText;
+      displayL.textContent += btnText;
+      console.log("x: " + x);
+      displayU.scrollLeft = displayU.scrollWidth;
+      displayL.scrollLeft = displayL.scrollWidth;
+    } else {
+      if (y === null) y = "";
+      y += btnText;
+      displayU.textContent += btnText;
+      displayL.textContent += btnText;
+      console.log("y: " + y);
+      displayU.scrollLeft = displayU.scrollWidth;
+      displayL.scrollLeft = displayL.scrollWidth;
+    }
   }
 }
 
 function clickOperator(btnText) {
-  if (btnText === "+") {
-    if (o !== null) {
-      if (!regexNum.test(field.textContent.charAt(field.textContent.length-1))) {
-        field.textContent = field.textContent.substring(0, field.textContent.length - 1);
+  if (displayU.textContent !== silly) {
+    if (x !== null && y === null) {
+      if (btnText === "+") o = "add";
+      if (btnText === "-") o = "subtract";
+      if (btnText === "×") o = "multiply";
+      if (btnText === "÷") o = "divide";
+
+      if (!regexNum.test(displayU.textContent.charAt(displayU.textContent.length-1))) {
+        displayU.textContent = displayU.textContent.substring(0, displayU.textContent.length-1);
+        displayL.textContent = displayL.textContent.substring(0, displayL.textContent.length-1);
       }
-      field.textContent += btnText;
-      o = "add";
-    } else {
-      field.textContent += btnText;
-      o = "add";
-    }
-  }
-  if (btnText === "-") {
-    if (o !== null) {
-      if (!regexNum.test(field.textContent.charAt(field.textContent.length-1))) {
-        field.textContent = field.textContent.substring(0, field.textContent.length - 1);
+      displayU.textContent += btnText;
+      displayL.textContent += btnText;
+    } else if (x !== null && y !== null) {
+      if (btnText === "+") oNext = "add";
+      if (btnText === "-") oNext = "subtract";
+      if (btnText === "×") oNext = "multiply";
+      if (btnText === "÷") oNext = "divide";
+
+      s = operate(parseInt(x), parseInt(y), o);
+      if (typeof s === "number") {
+        displayU.textContent += "=";
+        displayU.textContent += s;
+        displayU.textContent += btnText;
+        displayL.textContent = s;
+        displayL.textContent += btnText;
+        x = s;
+        y = null;
+        o = oNext;
+
+        displayU.scrollLeft = displayU.scrollWidth;
+        displayL.scrollLeft = displayL.scrollWidth;
+      } else {
+        displayU.textContent = s;
+        displayL.textContent = s;
       }
-      field.textContent += btnText;
-      o = "subtract";
-    } else {
-      field.textContent += btnText;
-      o = "subtract";
-    }
-  }
-  if (btnText === "×") {
-    if (o !== null) {
-      if (!regexNum.test(field.textContent.charAt(field.textContent.length-1))) {
-        field.textContent = field.textContent.substring(0, field.textContent.length - 1);
-      }
-      field.textContent += btnText;
-      o = "multiply";
-    } else {
-      field.textContent += btnText;
-      o = "multiply";
-    }
-  }
-  if (btnText === "÷") {
-    if (o !== null) {
-      if (!regexNum.test(field.textContent.charAt(field.textContent.length-1))) {
-        field.textContent = field.textContent.substring(0, field.textContent.length - 1);
-      }
-      field.textContent += btnText;
-      o = "divide";
-    } else {
-      field.textContent += btnText;
-      o = "divide";
     }
   }
 }
 
 function clickEquals(btnText) {
-  if (o !== null) {
-    if (x !== null && y !== null) {
-      sum = operate(parseInt(x), parseInt(y), o);
-      if (typeof sum === "number") {
-        field.textContent += btnText;
-        field.textContent += sum;
-        isCalculated();
-      } else {
-        field.textContent = sum;
-        isCalculated();
-      }
+  if (o !== null && x !== null && y !== null) {
+    s = operate(parseInt(x), parseInt(y), o);
+    if (typeof s === "number") {
+      x = s;
+      y = null;
+      o = null;
+      oNext = null;
+      displayU.textContent += btnText;
+      displayU.textContent += s;
+      displayL.textContent = s;
+      console.log("s: " + s);
+    } else {
+      displayU.textContent = s;
+      displayL.textContent = s;
+      x = null;
+      y = null;
+      o = null;
+      oNext = null;
+      s = null;
     }
   }
 }
 
 function clickClear() {
-  field.textContent = "";
-  currentOp.textContent = "";
+  displayU.textContent = "";
+  displayL.textContent = "";
   x = null;
   y = null;
   o = null;
-  calculated = false;
-}
-
-function isCalculated() {
-  x = sum;
-  y = null;
-  o = null;
+  oNext = null;
+  s = null;
 }
 
 function operate(x, y, o) {
@@ -133,26 +124,21 @@ function operate(x, y, o) {
 }
 
 function add(x, y) {
-  o = null;
   return x + y;
 }
 
 function subtract(x, y) {
-  o = null;
   return x - y;
 }
 
 function multiply(x, y) {
-  o = null;
   return x * y;
 }
 
 function divide(x, y) {
   if (x === 0 || y === 0) {
-    o = null;
-    return "Can't divide by zero, silly!";
+    return silly;
   } else {
-    o = null;
     return x / y;
   }
 }
