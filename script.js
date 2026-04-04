@@ -59,8 +59,9 @@ function clickOperator(btnText) {
       if (btnText === "×") oNext = "multiply";
       if (btnText === "÷") oNext = "divide";
 
-      s = operate(parseInt(x), parseInt(y), o);
-      if (typeof s === "number") {
+      s = operate(parseFloat(x), parseFloat(y), o);
+      if (!Number.isInteger(s)) s = s.toFixed(3);
+      if (s !== silly) {
         displayU.textContent += "=";
         displayU.textContent += s;
         displayU.textContent += btnText;
@@ -82,8 +83,9 @@ function clickOperator(btnText) {
 
 function clickEquals(btnText) {
   if (o !== null && x !== null && y !== null) {
-    s = operate(parseInt(x), parseInt(y), o);
-    if (typeof s === "number") {
+    s = operate(parseFloat(x), parseFloat(y), o);
+    if (!Number.isInteger(s)) s = s.toFixed(3);
+    if (s !== silly) {
       x = s;
       y = null;
       o = null;
@@ -136,6 +138,6 @@ function divide(x, y) {
   if (x === 0 || y === 0) {
     return silly;
   } else {
-    return x / y;
+    return (x / y);
   }
 }
