@@ -51,10 +51,10 @@ function clickOperator(btnText) {
       oNext = identifyOperator(btnText)
 
       s = operate(parseFloat(x), parseFloat(y), o);
-      if (!Number.isInteger(s) && s !== silly) s = s.toFixed(3);
+      if (!Number.isInteger(s) && s !== silly) s = parseFloat(s.toFixed(3));
 
       if (s !== silly) {
-        displayU.textContent += o + s + btnText;
+        displayU.textContent += "=" + s + btnText;
         displayL.textContent = s + btnText;
         followValueOnDisplay();
 
@@ -75,7 +75,7 @@ function clickOperator(btnText) {
 function clickEquals(btnText) {
   if (o !== null && x !== null && y !== null) {
     s = operate(parseFloat(x), parseFloat(y), o);
-    if (!Number.isInteger(s) && s !== silly) s = s.toFixed(3);
+    if (!Number.isInteger(s) && s !== silly) s = parseFloat(s.toFixed(3));
 
     if (s !== silly) {
       displayU.textContent += btnText + s;
@@ -163,6 +163,6 @@ function divide(x, y) {
   if (x === 0 || y === 0) {
     return silly;
   } else {
-    return (x / y);
+    return x / y;
   }
 }
