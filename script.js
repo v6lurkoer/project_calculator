@@ -26,15 +26,13 @@ function clickNumber(btnText) {
       x += btnText;
       displayU.textContent += btnText;
       displayL.textContent += btnText;
-      displayU.scrollLeft = displayU.scrollWidth;
-      displayL.scrollLeft = displayL.scrollWidth;
+      followValueOnDisplay();
     } else {
       if (y === null) y = "";
       y += btnText;
       displayU.textContent += btnText;
       displayL.textContent += btnText;
-      displayU.scrollLeft = displayU.scrollWidth;
-      displayL.scrollLeft = displayL.scrollWidth;
+      followValueOnDisplay();
     }
   }
 }
@@ -51,8 +49,10 @@ function clickOperator(btnText) {
         displayU.textContent = displayU.textContent.substring(0, displayU.textContent.length-1);
         displayL.textContent = displayL.textContent.substring(0, displayL.textContent.length-1);
       }
+
       displayU.textContent += btnText;
       displayL.textContent += btnText;
+      followValueOnDisplay();
     } else if (x !== null && y !== null) {
       if (btnText === "+") oNext = "add";
       if (btnText === "-") oNext = "subtract";
@@ -60,22 +60,22 @@ function clickOperator(btnText) {
       if (btnText === "÷") oNext = "divide";
 
       s = operate(parseFloat(x), parseFloat(y), o);
-      if (!Number.isInteger(s)) s = s.toFixed(3);
+      if (!Number.isInteger(s) && s !== silly) s = s.toFixed(3);
+
       if (s !== silly) {
-        displayU.textContent += "=";
-        displayU.textContent += s;
-        displayU.textContent += btnText;
-        displayL.textContent = s;
-        displayL.textContent += btnText;
+        displayU.textContent += "=" + s + btnText;
+        displayL.textContent = s + btnText;
+        followValueOnDisplay();
+
         x = s;
         y = null;
+        s = null;
         o = oNext;
-
-        displayU.scrollLeft = displayU.scrollWidth;
-        displayL.scrollLeft = displayL.scrollWidth;
       } else {
         displayU.textContent = s;
         displayL.textContent = s;
+        followValueOnDisplay();
+        clearValues();
       }
     }
   }
@@ -84,35 +84,48 @@ function clickOperator(btnText) {
 function clickEquals(btnText) {
   if (o !== null && x !== null && y !== null) {
     s = operate(parseFloat(x), parseFloat(y), o);
-    if (!Number.isInteger(s)) s = s.toFixed(3);
+    if (!Number.isInteger(s) && s !== silly) s = s.toFixed(3);
+
     if (s !== silly) {
+      displayU.textContent += btnText + s;
+      displayL.textContent = s;
+      followValueOnDisplay();
+
       x = s;
       y = null;
+      s = null;
       o = null;
       oNext = null;
-      displayU.textContent += btnText;
-      displayU.textContent += s;
-      displayL.textContent = s;
     } else {
       displayU.textContent = s;
       displayL.textContent = s;
-      x = null;
-      y = null;
-      o = null;
-      oNext = null;
-      s = null;
+      followValueOnDisplay();
+      clearValues();
     }
   }
 }
 
 function clickClear() {
-  displayU.textContent = "";
-  displayL.textContent = "";
+  clearValues();
+  clearDisplay();
+}
+
+function clearValues() {
   x = null;
   y = null;
+  s = null;
   o = null;
   oNext = null;
-  s = null;
+}
+
+function clearDisplay() {
+  displayU.textContent = "";
+  displayL.textContent = "";
+}
+
+function followValueOnDisplay() {
+  displayU.scrollLeft = displayU.scrollWidth;
+  displayL.scrollLeft = displayL.scrollWidth;
 }
 
 function operate(x, y, o) {

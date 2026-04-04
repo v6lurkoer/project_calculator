@@ -42,7 +42,7 @@ body {
 }
 
 #display-upper {
-  flex: 1;
+  flex: 3;
   border: 1px solid black;
   padding: 2px;
   align-content: center;
@@ -50,7 +50,7 @@ body {
 
 #display-lower {
   padding: 2px;
-  flex: 3;
+  flex: 5;
   border: 1px solid black;
   flex-wrap: wrap;
   align-content: center;
@@ -63,6 +63,7 @@ body {
   min-width: 0;
   text-align: right;
   direction: ltr;
+  scrollbar-width: none;
 }
 
 #buttons {
