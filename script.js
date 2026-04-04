@@ -85,6 +85,7 @@ function clickOperator(btnText) {
 function clickEquals(btnText) {
   if (o !== null && x !== null && y !== null) {
     s = operate(parseInt(x), parseInt(y), o);
+    console.log("typeof s: " + typeof s);
     if (typeof s === "number") {
       x = s;
       y = null;
@@ -93,7 +94,8 @@ function clickEquals(btnText) {
       displayU.textContent += btnText;
       displayU.textContent += s;
       displayL.textContent = s;
-      console.log("s: " + s);
+      console.log("xx: " + x);
+      console.log("ss: " + s);
     } else {
       displayU.textContent = s;
       displayL.textContent = s;
@@ -114,6 +116,10 @@ function clickClear() {
   o = null;
   oNext = null;
   s = null;
+}
+
+function roundDecimal() {
+
 }
 
 function operate(x, y, o) {
