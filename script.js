@@ -40,30 +40,21 @@ function clickNumber(btnText) {
 function clickOperator(btnText) {
   if (displayU.textContent !== silly) {
     if (x !== null && y === null) {
-      if (btnText === "+") o = "add";
-      if (btnText === "-") o = "subtract";
-      if (btnText === "×") o = "multiply";
-      if (btnText === "÷") o = "divide";
+      o = identifyOperator(btnText);
 
-      if (!regexNum.test(displayU.textContent.charAt(displayU.textContent.length-1))) {
-        displayU.textContent = displayU.textContent.substring(0, displayU.textContent.length-1);
-        displayL.textContent = displayL.textContent.substring(0, displayL.textContent.length-1);
-      }
+      displayOnlyOneOperator();
 
       displayU.textContent += btnText;
       displayL.textContent += btnText;
       followValueOnDisplay();
     } else if (x !== null && y !== null) {
-      if (btnText === "+") oNext = "add";
-      if (btnText === "-") oNext = "subtract";
-      if (btnText === "×") oNext = "multiply";
-      if (btnText === "÷") oNext = "divide";
+      oNext = identifyOperator(btnText)
 
       s = operate(parseFloat(x), parseFloat(y), o);
       if (!Number.isInteger(s) && s !== silly) s = s.toFixed(3);
 
       if (s !== silly) {
-        displayU.textContent += "=" + s + btnText;
+        displayU.textContent += o + s + btnText;
         displayL.textContent = s + btnText;
         followValueOnDisplay();
 
@@ -126,6 +117,27 @@ function clearDisplay() {
 function followValueOnDisplay() {
   displayU.scrollLeft = displayU.scrollWidth;
   displayL.scrollLeft = displayL.scrollWidth;
+}
+
+function displayOnlyOneOperator() {
+  let lastCharIndexU = displayU.textContent.length-1;
+  let lastCharU = displayU.textContent.charAt(lastCharIndexU);
+  if (!regexNum.test(lastCharU)) {
+    displayU.textContent = displayU.textContent.substring(0, lastCharIndexU);
+  }
+
+  let lastCharIndexL = displayL.textContent.length-1;
+  let lastCharL = displayL.textContent.charAt(lastCharIndexL);
+  if (!regexNum.test(lastCharL)) {
+    displayL.textContent = displayL.textContent.substring(0, lastCharIndexL);
+  }
+}
+
+function identifyOperator(btnText) {
+  if (btnText === "+") return "add";
+  if (btnText === "-") return "subtract";
+  if (btnText === "×") return "multiply";
+  if (btnText === "÷") return "divide";
 }
 
 function operate(x, y, o) {
