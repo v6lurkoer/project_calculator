@@ -1,10 +1,11 @@
-let x = null;
-let y = null;
-let o = null;
-let oNext = null;
-let s = null;
+let x = null;     // first value
+let y = null;     // second value
+let o = null;     // operator
+let oNext = null; // next operator
+let s = null;     // sum
+let e = false;    // equality check
 const regexNum = /[0-9]/;
-const silly = "Can't divide by zero, silly!";
+const divideByZeroMsg = "Can't divide by zero, silly!";
 
 const btns = document.querySelectorAll("button");
 const displayU = document.querySelector("#display-upper");
@@ -20,7 +21,11 @@ function handleClick() {
 }
 
 function clickNumber(btnText) {
-  if (displayU.textContent !== silly) {
+  if (s !== divideByZeroMsg) {
+    if (e) {
+      clearValues();
+      clearDisplay();
+    }
     if (o === null) {
       if (x === null) x = "";
       x += btnText;
@@ -38,7 +43,7 @@ function clickNumber(btnText) {
 }
 
 function clickOperator(btnText) {
-  if (displayU.textContent !== silly) {
+  if (s !== divideByZeroMsg) {
     if (x !== null && y === null) {
       o = identifyOperator(btnText);
 
@@ -48,13 +53,13 @@ function clickOperator(btnText) {
       displayL.textContent += btnText;
       followValueOnDisplay();
     } else if (x !== null && y !== null) {
-      oNext = identifyOperator(btnText)
+      oNext = identifyOperator(btnText);
 
       s = operate(parseFloat(x), parseFloat(y), o);
-      if (!Number.isInteger(s) && s !== silly) s = parseFloat(s.toFixed(3));
+      if (!Number.isInteger(s) && s !== divideByZeroMsg) s = parseFloat(s.toFixed(3));
 
-      if (s !== silly) {
-        displayU.textContent += "=" + s + btnText;
+      if (s !== divideByZeroMsg) {
+        displayU.textContent += btnText;
         displayL.textContent = s + btnText;
         followValueOnDisplay();
 
@@ -67,32 +72,33 @@ function clickOperator(btnText) {
         displayL.textContent = s;
         followValueOnDisplay();
         clearValues();
+        e = true;
       }
     }
   }
 }
 
 function clickEquals(btnText) {
-  if (o !== null && x !== null && y !== null) {
-    s = operate(parseFloat(x), parseFloat(y), o);
-    if (!Number.isInteger(s) && s !== silly) s = parseFloat(s.toFixed(3));
+  s = operate(parseFloat(x), parseFloat(y), o);
+  if (!Number.isInteger(s) && s !== divideByZeroMsg) s = parseFloat(s.toFixed(3));
 
-    if (s !== silly) {
-      displayU.textContent += btnText + s;
-      displayL.textContent = s;
-      followValueOnDisplay();
+  if (s !== divideByZeroMsg) {
+    displayU.textContent += btnText + s;
+    displayL.textContent = s;
+    followValueOnDisplay();
 
-      x = s;
-      y = null;
-      s = null;
-      o = null;
-      oNext = null;
-    } else {
-      displayU.textContent = s;
-      displayL.textContent = s;
-      followValueOnDisplay();
-      clearValues();
-    }
+    x = s;
+    y = null;
+    s = null;
+    o = null;
+    oNext = null;
+    e = true;
+  } else {
+    displayU.textContent = s;
+    displayL.textContent = s;
+    followValueOnDisplay();
+    clearValues();
+    e = true;
   }
 }
 
@@ -107,6 +113,7 @@ function clearValues() {
   s = null;
   o = null;
   oNext = null;
+  e = false;
 }
 
 function clearDisplay() {
@@ -161,7 +168,7 @@ function multiply(x, y) {
 
 function divide(x, y) {
   if (x === 0 || y === 0) {
-    return silly;
+    return divideByZeroMsg;
   } else {
     return x / y;
   }
