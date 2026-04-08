@@ -5,6 +5,7 @@ let oNext = null; // next operator
 let s = null;     // sum
 let e = false;    // equality check
 const regexNum = /[0-9]/;
+const regexDot = /\./;
 const divideByZeroMsg = "Can't divide by zero, silly!";
 
 const btns = document.querySelectorAll("button");
@@ -18,23 +19,26 @@ function handleClick() {
   if (this.getAttribute("class") === "operator") clickOperator(this.textContent);
   if (this.getAttribute("id") === "equals") clickEquals(this.textContent);
   if (this.getAttribute("id") === "clear") clickClear();
+  if (this.getAttribute("id") === "dot") clickDot(this.textContent);
 }
 
 function clickNumber(btnText) {
   if (s !== divideByZeroMsg) {
-    if (e) {
+    if (e && o === null) {
       clearValues();
       clearDisplay();
     }
     if (o === null) {
       if (x === null) x = "";
       x += btnText;
+
       displayU.textContent += btnText;
       displayL.textContent += btnText;
       followValueOnDisplay();
     } else {
       if (y === null) y = "";
       y += btnText;
+
       displayU.textContent += btnText;
       displayL.textContent += btnText;
       followValueOnDisplay();
@@ -47,7 +51,7 @@ function clickOperator(btnText) {
     if (x !== null && y === null) {
       o = identifyOperator(btnText);
 
-      displayOnlyOneOperator();
+      displayOnlyOneOperatorOrDot();
 
       displayU.textContent += btnText;
       displayL.textContent += btnText;
@@ -59,6 +63,8 @@ function clickOperator(btnText) {
       if (!Number.isInteger(s) && s !== divideByZeroMsg) s = parseFloat(s.toFixed(3));
 
       if (s !== divideByZeroMsg) {
+        displayOnlyOneOperatorOrDot();
+
         displayU.textContent += btnText;
         displayL.textContent = s + btnText;
         followValueOnDisplay();
@@ -83,6 +89,8 @@ function clickEquals(btnText) {
   if (!Number.isInteger(s) && s !== divideByZeroMsg) s = parseFloat(s.toFixed(3));
 
   if (s !== divideByZeroMsg) {
+    displayOnlyOneOperatorOrDot();
+
     displayU.textContent += btnText + s;
     displayL.textContent = s;
     followValueOnDisplay();
@@ -107,6 +115,24 @@ function clickClear() {
   clearDisplay();
 }
 
+function clickDot(btnText) {
+  if (displayU.textContent !== "" && !e) {
+    if (o === null) {
+      if (!regexDot.test(x)) {
+        x += btnText;
+        displayU.textContent += btnText;
+        displayL.textContent += btnText;
+      }
+    } else {
+      if (!regexDot.test(y)) {
+        y += btnText;
+        displayU.textContent += btnText;
+        displayL.textContent += btnText;
+      }
+    }
+  }
+}
+
 function clearValues() {
   x = null;
   y = null;
@@ -126,7 +152,7 @@ function followValueOnDisplay() {
   displayL.scrollLeft = displayL.scrollWidth;
 }
 
-function displayOnlyOneOperator() {
+function displayOnlyOneOperatorOrDot() {
   let lastCharIndexU = displayU.textContent.length-1;
   let lastCharU = displayU.textContent.charAt(lastCharIndexU);
   if (!regexNum.test(lastCharU)) {
