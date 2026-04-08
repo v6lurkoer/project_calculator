@@ -1,9 +1,9 @@
-let x = null;     // first value
-let y = null;     // second value
-let o = null;     // operator
-let oNext = null; // next operator
-let s = null;     // sum
-let e = false;    // equality check
+let x = null;             // first value
+let y = null;             // second value
+let o = null;             // operator
+let oNext = null;         // next operator
+let s = null;             // sum
+let e = false;            // equality check
 const regexNum = /[0-9]/;
 const regexDot = /\./;
 const divideByZeroMsg = "Can't divide by zero, silly!";
@@ -20,6 +20,7 @@ function handleClick() {
   if (this.getAttribute("id") === "equals") clickEquals(this.textContent);
   if (this.getAttribute("id") === "clear") clickClear();
   if (this.getAttribute("id") === "dot") clickDot(this.textContent);
+  if (this.getAttribute("id") === "del") clickDel();
 }
 
 function clickNumber(btnText) {
@@ -85,28 +86,32 @@ function clickOperator(btnText) {
 }
 
 function clickEquals(btnText) {
-  s = operate(parseFloat(x), parseFloat(y), o);
-  if (!Number.isInteger(s) && s !== divideByZeroMsg) s = parseFloat(s.toFixed(3));
+  if (x !== null && y !== null & o !== null) {
+    s = operate(parseFloat(x), parseFloat(y), o);
+    if (!Number.isInteger(s) && s !== divideByZeroMsg) s = parseFloat(s.toFixed(3));
 
-  if (s !== divideByZeroMsg) {
-    displayOnlyOneOperatorOrDot();
+    if (s !== divideByZeroMsg) {
+      displayOnlyOneOperatorOrDot();
 
-    displayU.textContent += btnText + s;
-    displayL.textContent = s;
-    followValueOnDisplay();
+      displayU.textContent += btnText + s;
+      displayL.textContent = s;
+      followValueOnDisplay();
 
-    x = s;
-    y = null;
-    s = null;
-    o = null;
-    oNext = null;
-    e = true;
-  } else {
-    displayU.textContent = s;
-    displayL.textContent = s;
-    followValueOnDisplay();
-    clearValues();
-    e = true;
+      x = s.toString();
+      y = null;
+      s = null;
+      o = null;
+      oNext = null;
+      e = true;
+      console.log(x);
+      console.log(typeof x);
+    } else {
+      displayU.textContent = s;
+      displayL.textContent = s;
+      followValueOnDisplay();
+      clearValues();
+      e = true;
+    }
   }
 }
 
@@ -129,6 +134,41 @@ function clickDot(btnText) {
         displayU.textContent += btnText;
         displayL.textContent += btnText;
       }
+    }
+  }
+}
+
+function clickDel() {
+  let lengthU = displayU.textContent.length-1;
+  let lengthL = displayL.textContent.length-1;
+
+  if (s !== divideByZeroMsg) {
+    if (x !== null && y !== null & o !== null) {
+      if (y.length-1 === 0) {
+        y = null;
+        displayU.textContent = displayU.textContent.substring(0, lengthU);
+        displayL.textContent = displayL.textContent.substring(0, lengthL);
+      } else {
+        y = y.substring(0, y.length-1);
+        displayU.textContent = displayU.textContent.substring(0, lengthU);
+        displayL.textContent = displayL.textContent.substring(0, lengthL);
+      }
+    } else if (x !== null && y === null && o !== null) {
+      o = null;
+      displayU.textContent = displayU.textContent.substring(0, lengthU);
+      displayL.textContent = displayL.textContent.substring(0, lengthL);
+    } else if (x !== null && y === null && o === null) {
+      if (x.length-1 === 0) {
+        x = null;
+        displayU.textContent = displayU.textContent.substring(0, lengthU);
+        displayL.textContent = displayL.textContent.substring(0, lengthL);
+      } else {
+        x = x.substring(0, x.length-1);
+        displayU.textContent = displayU.textContent.substring(0, lengthU);
+        displayL.textContent = displayL.textContent.substring(0, lengthL);
+      }
+    } else {
+      displayU.textContent = displayU.textContent.substring(0, lengthU);
     }
   }
 }
