@@ -6,6 +6,9 @@ let s = null;             // sum
 let e = false;            // equality check
 const regexNum = /[0-9]/;
 const regexDot = /\./;
+const regexEq = /=/;
+const regexOp = /[+\-*\/]/;
+const regexAll = /[0-9\.+\-*\/=]/;
 const divideByZeroMsg = "Can't divide by zero, silly!";
 
 const btns = document.querySelectorAll("button");
@@ -13,6 +16,7 @@ const displayU = document.querySelector("#display-upper");
 const displayL = document.querySelector("#display-lower");
 
 btns.forEach((btn) => btn.addEventListener("click", handleClick));
+document.addEventListener("keydown", handleKeyboardClick);
 
 function handleClick() {
   if (this.getAttribute("class") === "number") clickNumber(this.textContent);
@@ -21,6 +25,18 @@ function handleClick() {
   if (this.getAttribute("id") === "clear") clickClear();
   if (this.getAttribute("id") === "dot") clickDot(this.textContent);
   if (this.getAttribute("id") === "del") clickDel();
+}
+
+function handleKeyboardClick(event) {
+  if (regexAll.test(event.key)) {
+    if (regexNum.test(event.key)) clickNumber(event.key);
+    if (regexOp.test(event.key)) clickOperator(event.key);
+    if (regexEq.test(event.key)) clickEquals(event.key);
+    if (regexDot.test(event.key)) clickDot(event.key);
+  }
+  if (event.key === "Backspace") clickDel();
+  if (event.key === "Escape") clickClear();
+  if (event.key === "Enter") clickEquals("=");
 }
 
 function clickNumber(btnText) {
@@ -54,8 +70,8 @@ function clickOperator(btnText) {
 
       displayOnlyOneOperatorOrDot();
 
-      displayU.textContent += btnText;
-      displayL.textContent += btnText;
+      displayU.textContent += o;
+      displayL.textContent += o;
       followValueOnDisplay();
     } else if (x !== null && y !== null) {
       oNext = identifyOperator(btnText);
@@ -66,8 +82,8 @@ function clickOperator(btnText) {
       if (s !== divideByZeroMsg) {
         displayOnlyOneOperatorOrDot();
 
-        displayU.textContent += btnText;
-        displayL.textContent = s + btnText;
+        displayU.textContent += o;
+        displayL.textContent = s + o;
         followValueOnDisplay();
 
         x = s.toString();
@@ -86,7 +102,7 @@ function clickOperator(btnText) {
 }
 
 function clickEquals(btnText) {
-  if (x !== null && y !== null & o !== null) {
+  if (x !== null && y !== null && o !== null) {
     s = operate(parseFloat(x), parseFloat(y), o);
     if (!Number.isInteger(s) && s !== divideByZeroMsg) s = parseFloat(s.toFixed(3));
 
@@ -215,17 +231,17 @@ function displayOnlyOneOperatorOrDot() {
 }
 
 function identifyOperator(btnText) {
-  if (btnText === "+") return "add";
-  if (btnText === "-") return "subtract";
-  if (btnText === "×") return "multiply";
-  if (btnText === "÷") return "divide";
+  if (btnText === "+") return "+";
+  if (btnText === "-") return "-";
+  if (btnText === "*") return "×";
+  if (btnText === "/") return "÷";
 }
 
 function operate(x, y, o) {
-  if (o === "add") return add(x, y);
-  if (o === "subtract") return subtract(x, y);
-  if (o === "multiply") return multiply(x, y);
-  if (o === "divide") return divide(x, y);
+  if (o === "+") return add(x, y);
+  if (o === "-") return subtract(x, y);
+  if (o === "×") return multiply(x, y);
+  if (o === "÷") return divide(x, y);
 }
 
 function add(x, y) {
@@ -241,7 +257,7 @@ function multiply(x, y) {
 }
 
 function divide(x, y) {
-  if (x === 0 || y === 0) {
+  if (y === 0) {
     return divideByZeroMsg;
   } else {
     return x / y;
