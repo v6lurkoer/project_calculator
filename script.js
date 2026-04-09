@@ -70,7 +70,7 @@ function clickOperator(btnText) {
         displayL.textContent = s + btnText;
         followValueOnDisplay();
 
-        x = s;
+        x = s.toString();
         y = null;
         s = null;
         o = oNext;
@@ -103,8 +103,6 @@ function clickEquals(btnText) {
       o = null;
       oNext = null;
       e = true;
-      console.log(x);
-      console.log(typeof x);
     } else {
       displayU.textContent = s;
       displayL.textContent = s;
@@ -129,6 +127,14 @@ function clickDot(btnText) {
         displayL.textContent += btnText;
       }
     } else {
+      if (!regexDot.test(y)) {
+        y += btnText;
+        displayU.textContent += btnText;
+        displayL.textContent += btnText;
+      }
+    }
+  } else {
+    if (y !== null) {
       if (!regexDot.test(y)) {
         y += btnText;
         displayU.textContent += btnText;
