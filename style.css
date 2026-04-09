@@ -7,6 +7,7 @@ html,
 body {
   height: 100%;
   font-size: 100%;
+  font-family: sans-serif;
 }
 
 body {
@@ -23,58 +24,46 @@ body {
 }
 
 #calculator {
-  padding: 2px;
-  gap: 2px;
+  width: 450px;
+  height: 450px;
   display: flex;
-  flex: 0 1 40%;
-  aspect-ratio: 1 / 1;
   flex-direction: column;
   min-width: 0;
 }
 
 #display {
-  gap: 2px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  font-family: sans-serif;
 }
 
 #display-upper {
   flex: 3;
   border: 1px solid black;
-  padding: 2px;
   align-content: center;
+  font-size: 16px;
 }
 
 #display-lower {
-  padding: 2px;
   flex: 5;
   border: 1px solid black;
-  flex-wrap: wrap;
   align-content: center;
-}
-
-#display-upper,
-#display-lower {
-  background-color: bisque;
-  margin: 2px;
-  box-shadow: 2px 2px black;
+  font-size: 24px;
 }
 
 #display-upper,
 #display-lower {
   overflow: auto;
   white-space: nowrap;
-  min-width: 0;
   text-align: right;
   direction: ltr;
   scrollbar-width: none;
+  background-color: bisque;
+  margin: 2px;
+  box-shadow: 2px 2px black;
 }
 
 #buttons {
-  gap: 2px;
   flex: 4;
   display: flex;
 }
@@ -83,16 +72,14 @@ button {
   color: bisque;
   font-size: 20px;
   background-color: rgb(125, 104, 86);
-  border: none;
   box-shadow: 2px 2px black;
   margin: 2px;
-  transition-duration: 0.1s;
   border: 1px solid black;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: black
+  background-color: #5A4B3F;
 }
 
 button:active {
@@ -101,7 +88,6 @@ button:active {
 }
 
 #clear-del {
-  gap: 2px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -116,17 +102,14 @@ button:active {
 }
 
 #rows {
-  gap: 2px;
   flex: 4;
   display: flex;
   flex-direction: column;
 }
 
 .row {
-  gap: 2px;
   flex: 1;
   display: flex;
-  justify-content: space-between;
 }
 
 .number,

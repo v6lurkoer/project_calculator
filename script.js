@@ -127,10 +127,12 @@ function clickDot(btnText) {
         displayL.textContent += btnText;
       }
     } else {
-      if (!regexDot.test(y)) {
-        y += btnText;
-        displayU.textContent += btnText;
-        displayL.textContent += btnText;
+      if (y !== null) {
+        if (!regexDot.test(y)) {
+          y += btnText;
+          displayU.textContent += btnText;
+          displayL.textContent += btnText;
+        }
       }
     }
   } else {
