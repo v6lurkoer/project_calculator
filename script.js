@@ -120,7 +120,7 @@ function clickClear() {
 
 function clickDot(btnText) {
   if (displayU.textContent !== "" && !e) {
-    if (o === null) {
+    if (x !== null && o === null) {
       if (!regexDot.test(x)) {
         x += btnText;
         displayU.textContent += btnText;
