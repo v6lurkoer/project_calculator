@@ -19,6 +19,7 @@ btns.forEach((btn) => btn.addEventListener("click", handleClick));
 document.addEventListener("keydown", handleKeyboardClick);
 
 function handleClick() {
+  this.blur();
   if (this.getAttribute("class") === "number") clickNumber(this.textContent);
   if (this.getAttribute("class") === "operator") clickOperator(this.textContent);
   if (this.getAttribute("id") === "equals") clickEquals(this.textContent);
