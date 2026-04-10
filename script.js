@@ -4,12 +4,17 @@ let o = null;             // operator
 let oNext = null;         // next operator
 let s = null;             // sum
 let e = false;            // equality check
+
 const regexNum = /[0-9]/;
 const regexDot = /\./;
 const regexEq = /=/;
 const regexOp = /[+\-*\/]/;
 const regexAll = /[0-9\.+\-*\/=]/;
 const divideByZeroMsg = "Can't divide by zero, silly!";
+const keyMap = {
+  "×": "*",
+  "÷": "/",
+};
 
 const btns = document.querySelectorAll("button");
 const displayU = document.querySelector("#display-upper");
@@ -71,8 +76,8 @@ function clickOperator(btnText) {
 
       displayOnlyOneOperatorOrDot();
 
-      displayU.textContent += o;
-      displayL.textContent += o;
+      displayU.textContent += btnText;
+      displayL.textContent += btnText;
       followValueOnDisplay();
     } else if (x !== null && y !== null) {
       oNext = identifyOperator(btnText);
@@ -83,8 +88,8 @@ function clickOperator(btnText) {
       if (s !== divideByZeroMsg) {
         displayOnlyOneOperatorOrDot();
 
-        displayU.textContent += o;
-        displayL.textContent = s + o;
+        displayU.textContent += btnText;
+        displayL.textContent = s + btnText;
         followValueOnDisplay();
 
         x = s.toString();
@@ -234,15 +239,15 @@ function displayOnlyOneOperatorOrDot() {
 function identifyOperator(btnText) {
   if (btnText === "+") return "+";
   if (btnText === "-") return "-";
-  if (btnText === "*") return "×";
-  if (btnText === "/") return "÷";
+  if (btnText === "×") return "*";
+  if (btnText === "÷") return "/";
 }
 
 function operate(x, y, o) {
   if (o === "+") return add(x, y);
   if (o === "-") return subtract(x, y);
-  if (o === "×") return multiply(x, y);
-  if (o === "÷") return divide(x, y);
+  if (o === "*") return multiply(x, y);
+  if (o === "/") return divide(x, y);
 }
 
 function add(x, y) {
