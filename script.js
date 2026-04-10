@@ -11,10 +11,6 @@ const regexEq = /=/;
 const regexOp = /[+\-*\/]/;
 const regexAll = /[0-9\.+\-*\/=]/;
 const divideByZeroMsg = "Can't divide by zero, silly!";
-const keyMap = {
-  "×": "*",
-  "÷": "/",
-};
 
 const btns = document.querySelectorAll("button");
 const displayU = document.querySelector("#display-upper");
@@ -36,7 +32,11 @@ function handleClick() {
 function handleKeyboardClick(event) {
   if (regexAll.test(event.key)) {
     if (regexNum.test(event.key)) clickNumber(event.key);
-    if (regexOp.test(event.key)) clickOperator(event.key);
+    if (regexOp.test(event.key)) {
+      if (event.key === "*") clickOperator("×");
+      else if (event.key === "/") clickOperator("÷");
+      else clickOperator(event.key);
+    }
     if (regexEq.test(event.key)) clickEquals(event.key);
     if (regexDot.test(event.key)) clickDot(event.key);
   }
