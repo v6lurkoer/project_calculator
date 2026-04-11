@@ -9,7 +9,7 @@ const regexNum = /[0-9]/;
 const regexDot = /\./;
 const regexEq = /=/;
 const regexOp = /[+\-*\/]/;
-const regexAll = /[0-9\.+\-*\/=]/;
+const regexAll = /^[0-9\.+\-*\/=]$/;
 const divideByZeroMsg = "Can't divide by zero, silly!";
 
 const btns = document.querySelectorAll("button");
