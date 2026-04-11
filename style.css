@@ -119,12 +119,12 @@ button:active {
   flex: 1;
 }
 
-.footer {
+footer {
   display: flex;
   justify-content: center;
 }
 
-.footer p {
+footer p {
   padding: 16px;
   font-size: 24px;
 }
